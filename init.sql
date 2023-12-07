@@ -1,7 +1,6 @@
 CREATE TABLE Status (
     id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    UNIQUE(name)
+    name TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE Employees (
@@ -15,7 +14,7 @@ CREATE TABLE Tasks (
     id SERIAL PRIMARY KEY,
     displayname TEXT NOT NULL,
     description TEXT,
-    status INTEGER,
+    status INTEGER DEFAULT 0,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(status) REFERENCES Status(id)
@@ -25,8 +24,8 @@ CREATE TABLE TaskTimes (
     id SERIAL PRIMARY KEY,
     employeeid INTEGER,
     taskid INTEGER,
-    hours FLOAT NOT NULL DEFAULT 0.0,
     dateworked DATE DEFAULT CURRENT_DATE,
+    hours FLOAT NOT NULL DEFAULT 0.0,
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(employeeid) REFERENCES Employees(id),
@@ -57,4 +56,19 @@ CREATE TRIGGER update_tasks_modified AFTER UPDATE ON Tasks FOR EACH ROW EXECUTE 
 CREATE TRIGGER update_tasktimes_modified AFTER UPDATE ON TaskTimes FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 CREATE TRIGGER update_comments_modified AFTER UPDATE ON Comments FOR EACH ROW EXECUTE PROCEDURE update_modified_column();
 
+INSERT INTO Status (id, name) VALUES (0, 'TODO');
+INSERT INTO Status (id, name) VALUES (1, 'In Progress');
+INSERT INTO Status (id, name) VALUES (2, 'Paused');
+INSERT INTO Status (id, name) VALUES (3, 'Finished');
+INSERT INTO Status (id, name) VALUES (4, 'Canceled');
+
+INSERT INTO Employees (name) VALUES ('Josh');
+INSERT INTO Employees (name) VALUES ('Michael');
+INSERT INTO Employees (name) VALUES ('William');
+INSERT INTO Employees (name) VALUES ('Peter');
+
+INSERT INTO Tasks (displayname, description, status) VALUES ('Do stuff');
+INSERT INTO Tasks (displayname, description, status) VALUES ('Verify results');
+INSERT INTO Tasks (displayname, description, status) VALUES ('Eat lunch');
+INSERT INTO Tasks (displayname, description, status) VALUES ('Brainstorm');
 
