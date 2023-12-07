@@ -90,11 +90,11 @@ class ForumDBManager:
         cur.execute("SELECT id, displayname, description, Status.name, created, modified FROM Tasks JOIN Status ON Tasks.status=Status.id WHERE id=%s;", (_id,))
         return Task(*cur.fetchone())
     
-    def get_task_by_displayname(self, displayname):
-        """Return task specified by displayname"""
+    def search_tasks_by_displayname(self, displayname):
+        """Return tasks that with a similar displayname"""
         cur = self.conn.cursor()
-        cur.execute("SELECT id, displayname, description, Status.name, created, modified FROM Tasks JOIN Status ON Tasks.status=Status.id WHERE displayname=%s;", (displayname,))
-        return Task(*cur.fetchone())
+        cur.execute("SELECT id, displayname, description, Status.name, created, modified FROM Tasks JOIN Status ON Tasks.status=Status.id WHERE displayname LIKE %s;", (f"%{displayname}%",))
+        return [Task(*t) for t in cur.fetchall()]
     
     def get_tasks_by_status(self, statusname):
         """Return list of tasks of a certain status"""
