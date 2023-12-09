@@ -67,8 +67,10 @@ INSERT INTO Employees (name) VALUES ('Michael');
 INSERT INTO Employees (name) VALUES ('William');
 INSERT INTO Employees (name) VALUES ('Peter');
 
-INSERT INTO Tasks (displayname, description, status) VALUES ('Do stuff');
-INSERT INTO Tasks (displayname, description, status) VALUES ('Verify results');
-INSERT INTO Tasks (displayname, description, status) VALUES ('Eat lunch');
-INSERT INTO Tasks (displayname, description, status) VALUES ('Brainstorm');
+INSERT INTO Tasks (displayname, description, status) VALUES ('Do stuff', 'Foo Baz', 1);
+INSERT INTO Tasks (displayname, description, status) VALUES ('Verify results', 'We expect a 30% increase in user-satisfaction', 0);
+INSERT INTO Tasks (displayname, description, status) VALUES ('Ignore customer complaints', 'We are busy, come again later', 0);
+INSERT INTO Tasks (displayname, description, status) VALUES ('Eat lunch', 'Yum Yum', 3);
+INSERT INTO Tasks (displayname, description, status) VALUES ('Brainstorm', 'Binky and the brain...', 2);
+INSERT INTO Tasks (displayname, description, status) VALUES ('Write Fizzbuzz', 'You know, Fizzbuzz. Divisible by 3,5,15 and that jazz', 4);
 
