@@ -1,5 +1,6 @@
 import datetime
 import os
+import time
 
 from dotenv import dotenv_values
 import psycopg
@@ -10,18 +11,29 @@ class ForumDBManager:
     def __init__(self):
         # Connect to database using the environment variables
         config = {
-            **dotenv_values(".env"),  # load shared development variables
-            **os.environ  # override loaded values with environment variables
+            **dotenv_values(".env"), # load .env development variables
+            **os.environ # override loaded values with environment variables
         }
 
-        self.conn = psycopg.connect(autocommit=True,
-                        dbname=config.get("POSTGRES_DB"),
-                        host=config.get("POSTGRES_HOST"),
-                        user=config.get("POSTGRES_USER"),
-                        password=config.get("POSTGRES_PASSWORD"),
-                        port=config.get("POSTGRES_PORT"))
+        try:
+            self.__attempt_connection(config)
+        except psycopg.OperationalError:
+            print("WARNING: An error occurred attempting to connect to the database.\n\tThis may be because the docker container is still starting.\n\tOne retry will be attempted in 10 seconds.")
+            for _ in range(10):
+                time.sleep(1)
+                print('.',end='',flush=True)
+            print()
+            self.__attempt_connection(config)
         
         del config
+    
+    def __attempt_connection(self, config):
+        self.conn = psycopg.connect(autocommit=True,
+                            dbname=config.get("POSTGRES_DB"),
+                            host=config.get("POSTGRES_HOST"),
+                            user=config.get("POSTGRES_USER"),
+                            password=config.get("POSTGRES_PASSWORD"),
+                            port=config.get("POSTGRES_PORT"))
         
     def insert_employee(self, name):
         """Create and return a new employee in the database"""
@@ -158,6 +170,12 @@ class ForumDBManager:
         return [Comment(*c) for c in cur.fetchall()]
     
     #def get_timetasks_worked_between(self, employee, date1, date2):
+
+    def get_status(self):
+        """Return list of tuples of (id, statusname)"""
+        cur = self.conn.cursor()
+        cur.execute("SELECT id, name FROM Status;")
+        return [*cur.fetchall()]
     
     def update_employee(self, employee):
         """Update the database with the employee object"""
