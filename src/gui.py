@@ -1,13 +1,13 @@
 from tkinter import *
 from tkinter.ttk import *
-from taskdbmanager import ForumDBManager  
+from taskdbmanager import TaskDBManager  
 
 class MyApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Forum Database Manager")
+        self.root.title("Task Database Manager")
 
-        self.db_manager = ForumDBManager()
+        self.db_manager = TaskDBManager()
 
         self.main_frame = Frame(self.root)
         self.main_frame.pack()

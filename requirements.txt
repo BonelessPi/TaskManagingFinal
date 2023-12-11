@@ -1,2 +1,3 @@
+# If changing the requirements, make sure to update the list in run.py
 psycopg[binary]
 python-dotenv

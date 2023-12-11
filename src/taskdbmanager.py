@@ -1,33 +1,23 @@
 import datetime
 import os
-import time
 
 from dotenv import dotenv_values
 import psycopg
 
 from domainobjs import *
 
-class ForumDBManager:
+class TaskDBManager:
     def __init__(self):
         # Connect to database using the environment variables
         config = {
             **dotenv_values(".env"), # load .env development variables
             **os.environ # override loaded values with environment variables
         }
-
-        try:
-            self.__attempt_connection(config)
-        except psycopg.OperationalError:
-            print("WARNING: An error occurred attempting to connect to the database.\n\tThis may be because the docker container is still starting.\n\tOne retry will be attempted in 10 seconds.")
-            for _ in range(10):
-                time.sleep(1)
-                print('.',end='',flush=True)
-            print()
-            self.__attempt_connection(config)
-        
+        self.__attempt_connection(config)
         del config
     
     def __attempt_connection(self, config):
+        """Set self.conn attribute based on config dictionary"""
         self.conn = psycopg.connect(autocommit=True,
                             dbname=config.get("POSTGRES_DB"),
                             host=config.get("POSTGRES_HOST"),
