@@ -56,8 +56,7 @@ class MyApp:
         tab = self.notebook.select()
         if tab == self.Tasks:
             self.callTasks()
-        elif tab == self.LookUp:
-            self.callComments()
+        
     def display_comments(self, task_id):
         comments = self.get_comments_by_task(task_id)
         
