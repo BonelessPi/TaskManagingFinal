@@ -24,11 +24,7 @@ class MyApp:
         
         self.tasks = tk.Frame(self.notebook)
         self.notebook.add(self.tasks, text='Tasks')
-        self.show_todo_tasks
-        self.show_InProgress_tasks()
-        self.show_Paused_tasks()
-        self.show_Finished_tasks()
-        self.show_Canceled_tasks()
+        self.notebook.bind("<<NotebookTabChanged>>", self.tabChange)
         # Name label and entry on the first tab
         '''
         name_label = tk.Label(tab1, text="Name:", background="#6495ED", foreground="white")
@@ -45,22 +41,47 @@ class MyApp:
         
         
         
-        
         self.LookUp = tk.Frame(self.notebook)
         self.notebook.add(self.LookUp, text='LookUp tasks')
-        name_label = tk.Label(self.LookUp, text="TaskID:")
-        name_label.pack()
-        self.create_task_button = tk.Button(self.main_frame, text="Look Up", command=self.show_task_by_id)
+        self.name_label = tk.Label(self.LookUp, text="TaskID:")
+        self.name_label.pack()
+        self.task_id_entry = tk.Entry(self.LookUp)
+        self.task_id_entry.pack()
+        self.create_task_button = tk.Button(self.LookUp, text="Look Up", command=self.show_task_by_id)
         self.create_task_button.pack()
+        self.comments_text = tk.Text(self.LookUp,)
+        self.comments_text.pack(side ='right')
         
-    def show_task_by_id(self, task_id):
-    
-        task = self.db_manager.get_task_by_id(task_id)
+    def tabChange(self,event):
+        tab = self.notebook.select()
+        if tab == self.Tasks:
+            self.callTasks()
+        elif tab == self.LookUp:
+            self.callComments()
+    def display_comments(self, task_id):
+        comments = self.get_comments_by_task(task_id)
+        
+        for comment in comments:
+                
+                comment_text = f"Comment: {comment.content}\n"
+                comment_label = tk.Label(self.LookUp, text=comment_text)
+                comment_label.pack()
+       
+    def callTasks(self):
+        self.show_todo_tasks()
+        self.show_InProgress_tasks()
+        self.show_Paused_tasks()
+        self.show_Finished_tasks()
+        self.show_Canceled_tasks()
+    def show_task_by_id(self):
+        taskId = self.task_id_entry.get()
+        task = self.db_manager.get_task_by_id(taskId)
     
         
         task_details_text = f"Task ID: {task.id}\nDisplay Name: {task.displayname}\nDescription: {task.description}\nStatus: {task.status}"
         task_details_label = tk.Label(self.main_frame, text=task_details_text)
         task_details_label.pack()
+        self.display_comments(taskId)
 
     def create_task_page(self):
         self.task_issue = tk.Label(self.createTask, text="Issue:")
@@ -85,51 +106,51 @@ class MyApp:
         
    
     
-    tasks = []
+    tasksList = []
     def show_todo_tasks(self):
-       for label in self.tasks:
+       for label in self.tasksList:
             label.destroy()
        open_tasks = self.db_manager.get_tasks_by_status("TODO")
        for task in open_tasks:
-            info =  f"Task ID: {task._id}, Status: {task.status}, Name: {task.displayname}"
-            task_label = tk.Label(self.tasks, text=info)
-            task_label.left()
-            self.tasks.append(task_label)
+            info =  f"Task ID: {task._id}\n, Status: {task.status}\n, Name: {task.displayname}\n"
+            task_label = tk.Label(self.tasksList, text=info)
+            task_label.pack(side = 'left')
+            self.tasksList.append(task_label)
     def show_InProgress_tasks(self):
-       for label in self.tasks:
+       for label in self.tasksList:
             label.destroy()
        open_tasks = self.db_manager.get_tasks_by_status("In Progress")
        for task in open_tasks:
-            info =  f"Task ID: {task._id}, Status: {task.status}, Name: {task.displayname}"
-            task_label = tk.Label(self.tasks, text=info)
-            task_label.left()
+            info =  f"Task ID: {task._id}\n, Status: {task.status}\n, Name: {task.displayname}\n"
+            task_label = tk.Label(self.tasksList, text=info)
+            task_label.pack(side = 'left')
             self.tasks.append(task_label)
     def show_Paused_tasks(self):
-       for label in self.tasks:
+       for label in self.tasksList:
             label.destroy()
        open_tasks = self.db_manager.get_tasks_by_status("Paused")
        for task in open_tasks:
-            info =  f"Task ID: {task._id}, Status: {task.status}, Name: {task.displayname}"
-            task_label = tk.Label(self.tasks, text=info)
-            task_label.left()
+            info =  f"Task ID: {task._id}\n, Status: {task.status}\n, Name: {task.displayname}\n"
+            task_label = tk.Label(self.tasksList, text=info)
+            task_label.pack(side = 'left')
             self.tasks.append(task_label)
     def show_Finished_tasks(self):
        for label in self.tasks:
             label.destroy()
        open_tasks = self.db_manager.get_tasks_by_status("Finished")
        for task in open_tasks:
-            info =  f"Task ID: {task._id}, Status: {task.status}, Name: {task.displayname}"
-            task_label = tk.Label(self.tasks, text=info)
-            task_label.left()
+            info =  f"Task ID: {task._id}\n, Status: {task.status}\n, Name: {task.displayname}\n"
+            task_label = tk.Label(self.tasksList, text=info)
+            task_label.pack(side = 'left')
             self.tasks.append(task_label)
     def show_Canceled_tasks(self):
        for label in self.tasks:
             label.destroy()
        open_tasks = self.db_manager.get_tasks_by_status("Canceled")
        for task in open_tasks:
-            info =  f"Task ID: {task._id}, Status: {task.status}, Name: {task.displayname}"
-            task_label = tk.Label(self.tasks, text=info)
-            task_label.left()
+            info = f"Task ID: {task._id}\n, Status: {task.status}\n, Name: {task.displayname}\n"
+            task_label = tk.Label(self.tasksList, text=info)
+            task_label.pack(side = 'left')
             self.tasks.append(task_label)
        
     def lookup_task_page(self):
@@ -138,42 +159,6 @@ class MyApp:
         lookup_task_frame.pack()
         
 
- 
-        
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
- 
-    
     def add_task(self):
         issue = self.task_issue.get()
         description = self.task_description.get()
