@@ -4,14 +4,14 @@ class LookupPage(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, parent)
         self.parent = parent
-
+        self.commentDict = {}
 
         self.task_label = tk.Label(self, text="Task:")
         self.task_label.grid(row=0,column =0)
         self.task_clicked = tk.StringVar()
         self.task_dropdown = ttk.OptionMenu(self, self.task_clicked, None, [], command=self.load_task)
-        self.task_dropdown.grid(row = 0,column = 1)
-
+        self.task_dropdown.grid(row = 0,colum = 1)
+        task_obj = self.task_dict[self.task_clicked.get()] 
         self.displayname_label = tk.Label(self, text="Name:")
         self.displayname_label.grid(row = 1, column = 0)
         self.displayname_entry = tk.Entry(self)
@@ -32,6 +32,16 @@ class LookupPage(tk.Frame):
         self.update_task_button = tk.Button(self, text="Update", command=self.update_task)
         self.update_task_button.grid(row = 4, column = 0)
 
+        self.employeeid_label = tk.Label(self, text="EmployeeId:")
+        self.employeeid_label.grid(row = 5, column = 0)
+        self.Id = tk.Entry(self)
+        self.Id.grid(row = 5, column = 1)
+        self.comment_label = tk.Label(self, text="Comment:")
+        self.comment_label.grid(row = 6, column = 0)
+        self.comment_entry = tk.Entry(self)
+        self.comment_entry.grid(row = 6, column = 1)
+        self.add_comment_button = tk.Button(self, text="Add Comment", command=self.add_comment(task_obj._id))
+        self.add_comment_button.grid(row = 7, column = 0)
         # space_label = tk.Label(self, text="")
         # space_label.pack()
 
@@ -63,6 +73,8 @@ class LookupPage(tk.Frame):
         self.description_entry.delete(0, tk.END)
         self.description_entry.insert(0, task_obj.description)
         self.status_clicked.set(task_obj.status)
+        for label in self.commentDict.setdefault(task_obj._id, []):
+            label.destroy()
         self.display_comments(task_obj._id)
 
     def update_task(self):
@@ -82,8 +94,15 @@ class LookupPage(tk.Frame):
             comment_text = f"Comment: {comment.content}\n"
             comment_label = tk.Label(self, text=comment_text)
             comment_label.grid(row = count, column = 2)
+            self.commentDict[task_id].append(comment_label)
             count += 1
-
+    def add_comment(self,taskId):
+        employee = int(self.employeeid_label.get())
+        task = taskId
+        comment = self.comment_entry.get()
+         
+        self.db_manager.insert_comment(employee,task, comment)
+        
     @staticmethod
     def get_tab_name():
         return "Lookup/Update Task"
