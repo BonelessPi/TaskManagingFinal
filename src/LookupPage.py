@@ -7,39 +7,30 @@ class LookupPage(tk.Frame):
 
 
         self.task_label = tk.Label(self, text="Task:")
-        self.task_label.pack()
+        self.task_label.grid(row=0,column =0)
         self.task_clicked = tk.StringVar()
         self.task_dropdown = ttk.OptionMenu(self, self.task_clicked, None, [], command=self.load_task)
-        self.task_dropdown.pack()
+        self.task_dropdown.grid(row = 0,column = 1)
 
         self.displayname_label = tk.Label(self, text="Name:")
-        self.displayname_label.pack()
+        self.displayname_label.grid(row = 1, column = 0)
         self.displayname_entry = tk.Entry(self)
-        self.displayname_entry.pack()
+        self.displayname_entry.grid(row = 1, column = 1)
 
         self.description_label = tk.Label(self, text="Description:")
-        self.description_label.pack()
+        self.description_label.grid(row = 2, column = 0)
         self.description_entry = tk.Entry(self)
-        self.description_entry.pack()
+        self.description_entry.grid(row = 2, column = 1)
 
         self.task_status = tk.Label(self, text="Status:")
-        self.task_status.pack()
+        self.task_status.grid(row = 3, column = 0)
         options = [s for _,s in self.parent.db_manager.get_status()]
         self.status_clicked = tk.StringVar()
         self.status_dropdown = ttk.OptionMenu(self, self.status_clicked, None, *options)
-        self.status_dropdown.pack()
+        self.status_dropdown.grid(row = 3, column = 1)
 
         self.update_task_button = tk.Button(self, text="Update", command=self.update_task)
-        self.update_task_button.pack()
-
-        self.employeeid_label = tk.Label(self, text="EmployeeId:")
-        self.employeeid_label.pack()
-        self.Id = tk.Entry(self)
-        self.Id.pack()
-        self.comment = tk.Label(self, text="Comment:")
-        self.comment.pack()
-        self.comment = tk.Entry(self)
-        self.comment.pack()
+        self.update_task_button.grid(row = 4, column = 0)
 
         # space_label = tk.Label(self, text="")
         # space_label.pack()
@@ -86,10 +77,12 @@ class LookupPage(tk.Frame):
 
     def display_comments(self, task_id):
         comments = self.parent.db_manager.get_comments_by_task(task_id)
+        count = 0
         for comment in comments:
             comment_text = f"Comment: {comment.content}\n"
             comment_label = tk.Label(self, text=comment_text)
-            comment_label.pack(side = 'right')
+            comment_label.grid(row = count, column = 2)
+            count += 1
 
     @staticmethod
     def get_tab_name():
