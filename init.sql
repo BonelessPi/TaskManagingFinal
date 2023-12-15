@@ -74,3 +74,5 @@ INSERT INTO Tasks (displayname, description, status) VALUES ('Eat lunch', 'Yum Y
 INSERT INTO Tasks (displayname, description, status) VALUES ('Brainstorm', 'Binky and the brain...', 2);
 INSERT INTO Tasks (displayname, description, status) VALUES ('Write Fizzbuzz', 'You know, Fizzbuzz. Divisible by 3,5,15 and that jazz', 4);
 
+INSERT INTO Comments (authorid, taskid, content) VALUES (1, 1, 'Working on it now!');
+INSERT INTO Comments (authorid, taskid, content) VALUES (2, 6, 'Duplicate. Closed.');

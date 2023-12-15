@@ -89,7 +89,7 @@ class TaskDBManager:
     def get_task_by_id(self, _id):
         """Return task specified by _id"""
         cur = self.conn.cursor()
-        cur.execute("SELECT Tasks.id, displayname, description, Status.name, created, modified FROM Tasks JOIN Status ON Tasks.status=Status.id WHERE id=%s;", (_id,))
+        cur.execute("SELECT Tasks.id, displayname, description, Status.name, created, modified FROM Tasks JOIN Status ON Tasks.status=Status.id WHERE Tasks.id=%s;", (_id,))
         return Task(*cur.fetchone())
     
     def search_tasks_by_displayname(self, displayname):

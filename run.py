@@ -26,4 +26,4 @@ if containers_just_created:
         print('.',end='',flush=True)
     print()
 
-subprocess.run([sys.executable, "src/gui.py"])
+subprocess.run([sys.executable, "src/app.py"])
