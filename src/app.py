@@ -1,7 +1,7 @@
 from util import *
 from DisplayPage import DisplayPage
-#from CreatePage import CreatePage
-#from LookupPage import LookupPage
+from CreatePage import CreatePage
+from LookupPage import LookupPage
 from taskdbmanager import TaskDBManager
 
 class MyApp(tk.Tk):
@@ -22,16 +22,18 @@ class MyApp(tk.Tk):
         # initializing frames to an empty array
         self.frames = {} 
 
-        for F in (DisplayPage, ):#CreatePage, LookupPage):
+        for F in (DisplayPage, CreatePage, LookupPage):
             frame = F(self)
             self.frames[F] = frame
-            self.notebook.add(frame, text=frame.get_tab_name())
+            self.notebook.add(frame, text=F.get_tab_name())
         self.notebook.bind("<<NotebookTabChanged>>", self.tabChange)
 
     def tabChange(self,event):
         tab = self.notebook.tab(self.notebook.select(), "text")
-        if tab == 'Tasks':
+        if tab == DisplayPage.get_tab_name():
             self.frames[DisplayPage].refresh_tasks()
+        elif tab == LookupPage.get_tab_name():
+            self.frames[LookupPage].refresh_menu()
 
     # def show_display_page(self):
     #     self.show_frame(DisplayPage)
@@ -103,39 +105,4 @@ app.mainloop()
 #         self.comments_text = tk.Text(self.LookUp,)
 #         self.comments_text.pack(side ='right')
 #         '''
-#     def createLookUpPage(self):
-#         self.LookUp = tk.Frame(self.notebook)
-#         self.notebook.add(self.LookUp, text='LookUp tasks')
-#         self.name_label = tk.Label(self.LookUp, text="TaskID:")
-#         self.name_label.pack()
-#         self.task_id_entry = tk.Entry(self.LookUp)
-#         self.task_id_entry.pack()
-#         self.create_task_button = tk.Button(self.LookUp, text="Look Up", command=self.show_task_by_id)
-#         self.create_task_button.pack()
-    
-
-#     def createTaskPage(self):
-#         self.createTask = tk.Frame(self.notebook)
-#         self.notebook.add(self.createTask, text='Create Tasks')
-#         self.task_issue = tk.Label(self.createTask, text="Issue:")
-#         self.task_issue.pack()
-#         self.task_issue = tk.Entry(self.createTask)
-#         self.task_issue.pack()
-
-#         self.task_description = tk.Label(self.createTask, text="Description:")
-#         self.task_description.pack()
-#         self.task_description = tk.Entry(self.createTask)
-#         self.task_description.pack()
-
-#         self.task_status = tk.Label(self.createTask, text="Status:")
-#         self.task_status.pack()
-#         self.task_status = tk.Entry(self.createTask)
-#         self.task_status.pack()
-
- 
-#         self.add_task_button = tk.Button(self.createTask, text="Add Task", command=self.add_task)
-#         self.add_task_button.pack()
-#     def lookup_task_page(self):
-#         lookupWin = tk.Toplevel(self.root)
-#         lookup_task_frame = tk.Frame(lookupWin)
-#         lookup_task_frame.pack()
+#     

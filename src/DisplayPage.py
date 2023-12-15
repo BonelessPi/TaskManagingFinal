@@ -16,7 +16,7 @@ class DisplayPage(tk.Frame):
         for task in open_tasks:
             info = f"Task ID: {task._id},\n Status: {task.status},\n Name: {task.displayname}\n"
             task_label = tk.Label(self, text=info)
-            task_label.grid(row=row, column=column)
+            task_label.grid(row=row, column=column, padx=15, pady=5)
             self.taskListDict[status].append(task_label)
             row += 1
     
@@ -30,5 +30,6 @@ class DisplayPage(tk.Frame):
         for _,status in self.parent.db_manager.get_status():
             self.refresh_tasks_by_status(status)
 
-    def get_tab_name(self):
+    @staticmethod
+    def get_tab_name():
         return "Display Tasks"
