@@ -1,31 +1,31 @@
 from util import *
 
-class CreatePage(tk.Frame):
+class CreatePage(ttk.Frame):
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        ttk.Frame.__init__(self, parent)
         self.parent = parent
 
-        self.displayname_label = tk.Label(self, text="Name:")
+        self.displayname_label = ttk.Label(self, text="Name:")
         self.displayname_label.pack()
-        self.displayname_entry = tk.Entry(self)
+        self.displayname_entry = ttk.Entry(self, width=50)
         self.displayname_entry.pack()
 
-        self.description_label = tk.Label(self, text="Description:")
+        self.description_label = ttk.Label(self, text="Description:")
         self.description_label.pack()
-        self.description_entry = tk.Entry(self)
+        self.description_entry = ttk.Entry(self, width=50)
         self.description_entry.pack()
 
-        self.task_status = tk.Label(self, text="Status:")
+        self.task_status = ttk.Label(self, text="Status:")
         self.task_status.pack()
         options = [s for _,s in self.parent.db_manager.get_status()]
         self.clicked = tk.StringVar()
         self.status_dropdown = ttk.OptionMenu(self, self.clicked, options[0], *options)
         self.status_dropdown.pack()
 
-        space_label = tk.Label(self, text="")
+        space_label = ttk.Label(self, text="")
         space_label.pack()
 
-        self.add_task_button = tk.Button(self, text="Add Task", command=self.add_task)
+        self.add_task_button = ttk.Button(self, text="Add Task", command=self.add_task)
         self.add_task_button.pack()
     
     def add_task(self):

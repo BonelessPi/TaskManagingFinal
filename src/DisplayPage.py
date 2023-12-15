@@ -1,8 +1,8 @@
 from util import *
 
-class DisplayPage(tk.Frame):
+class DisplayPage(ttk.Frame):
     def __init__(self, parent):
-        tk.Frame.__init__(self, parent)
+        ttk.Frame.__init__(self, parent)
         self.parent = parent
         self.taskListDict = {}
         self.refresh_tasks()
@@ -14,9 +14,9 @@ class DisplayPage(tk.Frame):
         column = self.get_column_for_status(status)
         row = 0
         for task in open_tasks:
-            info = f"Task ID: {task._id},\n Status: {task.status},\n Name: {task.displayname}\n"
-            task_label = tk.Label(self, text=info)
-            task_label.grid(row=row, column=column, padx=15, pady=5)
+            info = self.format_task_string(task)
+            task_label = ttk.Label(self, text=info)
+            task_label.grid(row=row, column=column, padx=15, pady=5, sticky='w')
             self.taskListDict[status].append(task_label)
             row += 1
     
@@ -29,6 +29,12 @@ class DisplayPage(tk.Frame):
     def refresh_tasks(self):
         for _,status in self.parent.db_manager.get_status():
             self.refresh_tasks_by_status(status)
+    
+    def format_task_string(self, task):
+        i,s,n = task._id,task.status,task.displayname
+        NAME_MAX_CHARACTERS_SHOWN = 30
+        n = n[:NAME_MAX_CHARACTERS_SHOWN] + (len(n)>NAME_MAX_CHARACTERS_SHOWN)*'...'
+        return f"Task ID: {i},\n Status: {s},\n Name: {n}\n"
 
     @staticmethod
     def get_tab_name():

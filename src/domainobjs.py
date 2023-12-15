@@ -5,7 +5,7 @@ class Employee:
         self.created = created
         self.modified = modified
     def __repr__(self):
-        return f"Employee #{self._id} Name: {self.username}"
+        return f"Employee #{self._id}; Name: {self.name}"
 
 class Task:
     def __init__(self, _id, displayname, description, status, created, modified):
