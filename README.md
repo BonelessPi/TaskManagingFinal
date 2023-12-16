@@ -7,8 +7,10 @@ look up a task and its comments, update a task and add comments to a task.
 
 1. Clone the Git repository to your local machine
 2. Make sure Docker and a recent version of Python
-3. Navigate to the main folder of the project and run `python run.py`. This will implicitly call `docker compose up -d`
-4. To destroy the docker compose stack and the database, run `python reset.py`
+3. Copy .env_sample and rename the new file .env
+4. Enter data for each of the fields in .env (remove the curly braces)
+5. Navigate to the main folder of the project and run `python run.py`. This will implicitly call `docker compose up -d`
+6. To destroy the docker compose stack and the database, run `python reset.py`
 
 If this fails to run, let me know and I can send a screen recording
 
